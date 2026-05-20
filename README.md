@@ -8,6 +8,8 @@ Built with PyQt6. All APIs are free and require no keys.
 ![Python](https://img.shields.io/pypi/pyversions/pwb)
 ![License](https://img.shields.io/pypi/l/pwb)
 
+![Peering Workbench](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/slides.gif)
+
 ---
 
 ## Install
@@ -54,12 +56,12 @@ One search bar for everything. No mode switching, no tab hunting.
 
 ### 🏷 ASN Lookup
 
-Enter any ASN — pulls **PeeringDB**, **RIPEstat**, and **RDAP** simultaneously in background threads. Sub-tabs for each data source plus raw JSON. One-click "Open in HE" jumps to the embedded HE tab for that ASN.
+Enter any ASN — pulls **PeeringDB**, **RIPEstat**, and **RDAP** simultaneously in background threads. Sub-tabs for each data source plus raw JSON. One-click "Open in HE" jumps to the HE BGP Toolkit for that ASN.
 
 - IX presence with port speeds
 - Facility list with cities
 - Peering policy, NOC/policy email contacts
-- Announced prefixes, upstream/downstream neighbors
+- Announced prefixes, upstream/downstream neighbors with power scores
 - WHOIS registration, abuse contacts
 
 ![ASN / PeeringDB Lookup](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/peeringdb.png)
@@ -71,8 +73,8 @@ Full context for any IPv4 or IPv6 address in a single view:
 - **Team Cymru** DNS-based IP→ASN mapping with resolved network name (IPv4 and IPv6)
 - **RDAP** network allocation and CIDR blocks
 - **RIPEstat** geolocation, abuse contacts, prefix info
-- **RPKI validation** — automatically derives the covering prefix and origin ASN, then checks ROA validity inline. You see whether the prefix is RPKI-valid without leaving the tab.
-- **One-click prefix drill-down** — click the "Full Prefix Lookup" link to jump to the Prefix tab with the covering prefix pre-filled, launching the full lookup (RPKI, IRR, looking glass, related prefixes) in one click.
+- **RPKI validation** — automatically derives the covering prefix and origin ASN, then checks ROA validity inline
+- **One-click prefix drill-down** — click the "Full Prefix Lookup" link to jump to the Prefix tab with the covering prefix pre-filled
 
 ![IP Lookup](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/iplookup.png)
 
@@ -100,9 +102,37 @@ Shows whether route/route6 objects exist in the IRR for the prefix, which regist
 - **BGP only — no IRR ✗** — announced but no route object (peers filtering on IRR will drop it)
 - **IRR only — not announced** — registered but not in the BGP table (stale object)
 
-This surfaces the kind of mismatch where RPKI is valid but a peer's IRR-based filters silently reject the prefix.
-
 ![Prefix / Looking Glass with RPKI and IRR](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/lookingglass.png)
+
+### 🗺 AS-Path Visualization
+
+Trace the BGP-level path between any two IP addresses. Enter a source and destination IP, and the tool builds an interactive directed graph showing how traffic flows between the two networks.
+
+- **Forward paths** (burgundy, left→right) — how traffic reaches the destination from the source's perspective
+- **Reverse paths** (teal, right→left) — how return traffic flows back, exposing BGP asymmetry
+- **Power-weighted edges** — line thickness reflects the neighbour power score from RIPEstat, showing which transit links dominate the routing table
+- **Path selection** — click any path in the sidebar to highlight it; toggle forward/reverse visibility independently
+- **Zoom and pan** — scroll to zoom, drag to pan, "Fit" to auto-frame
+
+The data pipeline chains Team Cymru (IP→ASN resolution with RIPEstat/RDAP fallback), RIPEstat looking glass (real AS paths from 20+ RRC vantage points), and asn-neighbours (upstream relationships and power scores). All ASN names are resolved via the shared name cache.
+
+> **Note:** This is a model based on observed BGP control-plane data, not confirmed data-plane forwarding. Factors like Local Preference, BGP communities, MED, ECMP, and private peering are invisible externally. The visualization shows which routes *exist* and how strongly they're represented — valuable for peering analysis, but not a guarantee of actual traffic paths. See the built-in help (?) for a full discussion of limitations.
+
+![AS-Path Visualization](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/pathviz.png)
+
+#### Link Details
+
+Click any edge in the graph to open a detail dialog querying PeeringDB for the two adjacent ASNs:
+
+- **Peering policies** — Open / Selective / Restrictive, with policy URL and contact email
+- **Shared Internet Exchanges** — every IX where both networks are present, with port speeds per side
+- **Shared Facilities** — every datacenter where both networks are colocated
+
+This answers the key peering question: when you see a transit link in the graph, *where* could these two networks be exchanging traffic?
+
+![Link Detail — Shared IXes](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/pathviz-detail.png)
+
+![Link Detail — Facilities](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/pathviz-detail2.png)
 
 ### 🔎 DNS Lookup
 
@@ -118,6 +148,12 @@ General-purpose DNS record lookup powered by `dnspython`. Enter any hostname to 
 - **CAA** — certificate authority authorization
 
 Enter an IP address and it automatically performs a reverse PTR lookup instead. Useful for identifying router hostnames from traceroute output.
+
+### ❓ Built-in Help
+
+Both the main workbench and the AS-Path Visualization include a **?** button that opens context-sensitive help covering every feature, API source, and how to interpret results. The path visualization help includes a detailed discussion of what the data can and cannot tell you.
+
+![Help System](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/help.png)
 
 ### 💾 ASN Name Cache
 
@@ -160,7 +196,7 @@ All free, no API keys required.
 ## Development
 
 ```bash
-git clone https://github.com/speterman/pwb.git
+git clone https://github.com/scottpeterman/pwb.git
 cd pwb
 python -m venv .venv
 source .venv/bin/activate

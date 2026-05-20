@@ -1309,6 +1309,24 @@ class PeeringWorkbench(QMainWindow):
         self._quick_btn.clicked.connect(self._quick_lookup)
         toolbar.addWidget(self._quick_btn)
 
+        toolbar.addSeparator()
+
+        pathviz_btn = QPushButton("🗺 AS-Path Viz")
+        pathviz_btn.setToolTip("Visualise BGP AS-path between two IPs")
+        pathviz_btn.clicked.connect(self._open_pathviz)
+        toolbar.addWidget(pathviz_btn)
+
+        # Spacer pushes help buttons to the right
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        toolbar.addWidget(spacer)
+
+        help_btn = QPushButton("?")
+        help_btn.setStyleSheet("padding: 4px 0px; font-size: 16px; min-width: 32px;")
+        help_btn.setToolTip("Help")
+        help_btn.clicked.connect(self._open_help)
+        toolbar.addWidget(help_btn)
+
         # Main tabs
         self._tabs = QTabWidget()
         layout.addWidget(self._tabs)
@@ -1485,6 +1503,21 @@ class PeeringWorkbench(QMainWindow):
         )
 
     # ── Actions ───────────────────────────────────────────────────────────
+
+    def _open_pathviz(self):
+        """Open the AS-Path Visualization window."""
+        from .pathviz import PathVisualizationWindow
+        win = PathVisualizationWindow(parent=self)
+        win.setStyleSheet(STYLESHEET)
+        win.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        win.show()
+
+    def _open_help(self):
+        """Open the Help dialog."""
+        from .helpview import WorkbenchHelpDialog
+        dlg = WorkbenchHelpDialog(parent=self)
+        dlg.setStyleSheet(STYLESHEET)
+        dlg.show()
 
     def _quick_lookup(self):
         text = self._quick_input.text().strip()

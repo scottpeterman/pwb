@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pwb"
-version = "0.1.0"
+version = "0.2.0"
 description = "Peering Workbench — consolidated ASN, WHOIS, PeeringDB, RPKI, IRR, DNS, and Looking Glass desktop tool for network engineers"
 readme = "README.md"
 license = {text = "GPLv3"}
