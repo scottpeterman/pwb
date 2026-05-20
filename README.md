@@ -80,9 +80,7 @@ Full context for any IPv4 or IPv6 address in a single view:
 
 Query any IPv4 or IPv6 prefix for routing status, origin AS, related/covering prefixes, and **RIPEstat looking glass** data from 25+ RIPE RRC route collectors worldwide — with **resolved AS-path names**.
 
-```
-8218 (Zayo-IPX) → 6461 (Zayo) → 174 (Cogent) → 6169 (Kentik)
-```
+
 
 Every ASN in every AS path is automatically resolved via PeeringDB and cached to disk. First lookup resolves names in the background; subsequent lookups render instantly from cache.
 
