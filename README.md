@@ -213,4 +213,4 @@ twine upload dist/*
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+GPLv3 — see [LICENSE](LICENSE).
