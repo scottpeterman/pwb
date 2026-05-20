@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pwb"
+version = "0.1.0"
+description = "Peering Workbench — consolidated ASN, WHOIS, PeeringDB, RPKI, IRR, DNS, and Looking Glass desktop tool for network engineers"
+readme = "README.md"
+license = {text = "GPLv3"}
+requires-python = ">=3.10"
+authors = [
+    {name = "speterman"},
+]
+keywords = [
+    "bgp", "peering", "asn", "whois", "peeringdb", "looking-glass",
+    "network", "noc", "rdap", "ripestat", "rpki", "irr", "dns",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: X11 Applications :: Qt",
+    "Environment :: MacOS X",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Networking",
+    "Topic :: System :: Networking :: Monitoring",
+]
+dependencies = [
+    "PyQt6>=6.5",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+cymru = ["dnspython>=2.4"]
+dev = [
+    "build",
+    "twine",
+    "ruff",
+]
+
+[project.urls]
+Homepage = "https://github.com/scottpeterman/pwb"
+Issues = "https://github.com/scottpeterman/pwb/issues"
+Changelog = "https://github.com/scottpeterman/pwb/blob/main/CHANGELOG.md"
+
+[project.gui-scripts]
+peering-workbench = "pwb:main"
+
+[tool.setuptools.packages.find]
+include = ["pwb*"]
+
+[tool.setuptools.package-data]
+pwb = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
