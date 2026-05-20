@@ -62,7 +62,7 @@ Enter any ASN — pulls **PeeringDB**, **RIPEstat**, and **RDAP** simultaneously
 - Announced prefixes, upstream/downstream neighbors
 - WHOIS registration, abuse contacts
 
-![ASN / PeeringDB Lookup](screenshots/peeringdb.png)
+![ASN / PeeringDB Lookup](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/peeringdb.png)
 
 ### 🌍 IP Lookup
 
@@ -74,13 +74,11 @@ Full context for any IPv4 or IPv6 address in a single view:
 - **RPKI validation** — automatically derives the covering prefix and origin ASN, then checks ROA validity inline. You see whether the prefix is RPKI-valid without leaving the tab.
 - **One-click prefix drill-down** — click the "Full Prefix Lookup" link to jump to the Prefix tab with the covering prefix pre-filled, launching the full lookup (RPKI, IRR, looking glass, related prefixes) in one click.
 
-![IP Lookup](screenshots/iplookup.png)
+![IP Lookup](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/iplookup.png)
 
 ### 📡 Prefix / Looking Glass
 
 Query any IPv4 or IPv6 prefix for routing status, origin AS, related/covering prefixes, and **RIPEstat looking glass** data from 25+ RIPE RRC route collectors worldwide — with **resolved AS-path names**.
-
-
 
 Every ASN in every AS path is automatically resolved via PeeringDB and cached to disk. First lookup resolves names in the background; subsequent lookups render instantly from cache.
 
@@ -104,7 +102,7 @@ Shows whether route/route6 objects exist in the IRR for the prefix, which regist
 
 This surfaces the kind of mismatch where RPKI is valid but a peer's IRR-based filters silently reject the prefix.
 
-![Prefix / Looking Glass with RPKI and IRR](screenshots/lookingglass.png)
+![Prefix / Looking Glass with RPKI and IRR](https://raw.githubusercontent.com/scottpeterman/pwb/refs/heads/main/screenshots/lookingglass.png)
 
 ### 🔎 DNS Lookup
 
@@ -124,6 +122,20 @@ Enter an IP address and it automatically performs a reverse PTR lookup instead. 
 ### 💾 ASN Name Cache
 
 Persistent disk cache at `~/.peering_workbench/asn_cache.json`. Grows automatically as you use the tool — after a few prefix lookups you'll have the entire tier-1/tier-2 transit universe cached. The file is portable: back it up, sync across machines, or seed it from other sources.
+
+### 🔑 PeeringDB API Key (optional)
+
+PeeringDB throttles anonymous API requests. If you hit `429 Too Many Requests` errors during heavy use, register for a free API key at [peeringdb.com](https://www.peeringdb.com/) and configure it one of two ways:
+
+```bash
+# Environment variable
+export PEERINGDB_API_KEY=your-key-here
+
+# Or save to config file
+echo "your-key-here" > ~/.peering_workbench/peeringdb_api_key
+```
+
+Authenticated requests get significantly higher rate limits. The tool will also automatically retry on 429 responses with backoff, but an API key avoids the delays in the first place.
 
 ---
 
@@ -165,4 +177,4 @@ twine upload dist/*
 
 ## License
 
-GPLv3 — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
